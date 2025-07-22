@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>We Wit It L.A.</title>
+    <link rel="icon" type="image/x-icon" href="assets/wewititfavicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Raleway', 'Helvetica Neue', Arial, sans-serif;
+            background-color: #fff;
+            color: #333;
+            line-height: 1.6;
+            font-size: 14px;
+            font-weight: 400;
+        }
+        
+        /* Intro Modal Overlay */
+        .intro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1s ease-out;
+        }
+        
+        .intro-overlay.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .intro-overlay.pixelate-out {
+            animation: pixelBreakaway 1.5s ease-out forwards;
+        }
+        
+        @keyframes pixelBreakaway {
+            0% {
+                filter: none;
+                transform: scale(1);
+            }
+            20% {
+                filter: contrast(200%) brightness(150%);
+            }
+            40% {
+                filter: contrast(200%) brightness(150%) blur(1px);
+                transform: scale(1.02);
+            }
+            60% {
+                filter: contrast(300%) brightness(200%) blur(3px);
+                transform: scale(1.05) rotate(0.5deg);
+            }
+            80% {
+                filter: contrast(500%) brightness(300%) blur(8px);
+                transform: scale(1.1) rotate(-1deg);
+                opacity: 0.8;
+            }
+            100% {
+                filter: contrast(1000%) brightness(500%) blur(20px);
+                transform: scale(1.5) rotate(2deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Pixel grid overlay effect */
+        .intro-overlay::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px),
+                repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px);
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.3s ease-in;
+        }
+        
+        .intro-overlay.pixelate-out::before {
+            opacity: 1;
+            animation: pixelGrid 1.5s ease-out forwards;
+        }
+        
+        @keyframes pixelGrid {
+            0% {
+                background-size: 4px 4px;
+                opacity: 0;
+            }
+            20% {
+                background-size: 8px 8px;
+                opacity: 0.5;
+            }
+            50% {
+                background-size: 16px 16px;
+                opacity: 1;
+            }
+            100% {
+                background-size: 64px 64px;
+                opacity: 0;
+            }
+        }
+        
+        /* Windows XP Style Modal */
+        .windows-modal {
+            width: 500px;
+            background: linear-gradient(180deg, #0054E3 0%, #0054E3 30px, #ECE9D8 30px, #ECE9D8 100%);
+            border: 2px solid #0054E3;
+            border-radius: 8px 8px 0 0;
+            box-shadow: 0 0 0 1px #000, 2px 2px 5px rgba(0,0,0,0.5);
+            font-family: 'Tahoma', sans-serif;
+            position: relative;
+            z-index: 10;
+            transition: transform 1.5s ease-out, filter 1.5s ease-out;
+        }
+        
+        .intro-overlay.pixelate-out .windows-modal {
+            animation: modalBreakaway 1.5s ease-out forwards;
+        }
+        
+        @keyframes modalBreakaway {
+            0% {
+                transform: scale(1) rotate(0deg);
+                filter: none;
+            }
+            30% {
+                transform: scale(0.95) rotate(-0.5deg);
+                filter: hue-rotate(20deg);
+            }
+            60% {
+                transform: scale(1.1) rotate(1deg) translateY(-20px);
+                filter: hue-rotate(90deg) saturate(2);
+            }
+            100% {
+                transform: scale(0.5) rotate(-5deg) translateY(100vh);
+                filter: hue-rotate(180deg) saturate(3) blur(10px);
+            }
+        }
+        
+        .windows-header {
+            padding: 6px 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            font-size: 13px;
+            font-weight: bold;
+        }
+        
+        .windows-body {
+            background: #ECE9D8;
+            padding: 30px;
+            text-align: center;
+            font-size: 14px;
+            line-height: 1.8;
+            color: #000;
+        }
+        
+        .windows-button {
+            margin-top: 30px;
+            padding: 8px 20px;
+            background: linear-gradient(180deg, #fff 0%, #ECE9D8 100%);
+            border: 1px solid #003C74;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 13px;
+            box-shadow: inset -1px -1px #00138C, inset 1px 1px #fff;
+        }
+        
+        .windows-button:hover {
+            background: linear-gradient(180deg, #E5F2FF 0%, #C9E0FF 100%);
+        }
+        
+        .windows-button:active {
+            background: linear-gradient(180deg, #C9E0FF 0%, #E5F2FF 100%);
+            box-shadow: inset 1px 1px #00138C, inset -1px -1px #fff;
+        }
+        
+        /* Header Styles */
+        .header-top {
+            background-color: #f8f8f8;
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 11px;
+        }
+        
+        .header-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #666;
+            font-weight: 400;
+            transition: color 0.2s;
+        }
+        
+        .nav-links a:hover {
+            color: #d32f2f;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .social-links a {
+            text-decoration: none;
+            color: #666;
+            transition: color 0.2s;
+        }
+        
+        .social-links a:hover {
+            color: #333;
+        }
+        
+        /* Logo Section */
+        .logo-section {
+            background-color: #fff;
+            padding: 35px 0 25px;
+            text-align: center;
+            position: relative;
+            border-bottom: 4px solid #d32f2f;
+        }
+        
+        .logo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            padding: 0 20px;
+        }
+        
+        .logo-image {
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            width: 90px;
+            height: 90px;
+        }
+        
+        .logo {
+            font-size: 72px;
+            font-weight: 700;
+            letter-spacing: -3px;
+            margin-bottom: 8px;
+            color: #d32f2f;
+            font-family: 'Raleway', sans-serif;
+            text-transform: uppercase;
+        }
+        
+        .tagline {
+            color: #666;
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+        
+        /* ChrisBot in header */
+        .header-chrisbot {
+            position: absolute;
+            left: 120px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100px;
+            height: 100px;
+            cursor: pointer;
+        }
+        
+        .header-chrisbot img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        @media (max-width: 768px) {
+            .header-chrisbot {
+                width: 80px;
+                height: 80px;
+                left: 100px;
+            }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(-50%); }
+            50% { transform: translateY(-50%) translateY(-10px); }
+        }
+        
+        /* Main Navigation */
+        .main-nav {
+            background-color: #2a2a2a;
+            padding: 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .main-nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .main-nav li {
+            position: relative;
+        }
+        
+        .main-nav a {
+            display: block;
+            padding: 16px 28px;
+            text-decoration: none;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+            font-family: 'Raleway', sans-serif;
+        }
+        
+        .main-nav a:hover {
+            background-color: #d32f2f;
+            color: #fff;
+        }
+        
+        /* Content Container */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: flex;
+            gap: 35px;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 2;
+        }
+        
+        /* Featured Carousel */
+        .featured-carousel {
+            position: relative;
+            margin-bottom: 50px;
+            background-color: #000;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .featured-carousel img {
+            width: 100%;
+            height: 450px;
+            object-fit: cover;
+        }
+        
+        .carousel-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            padding: 30px;
+            color: white;
+        }
+        
+        .carousel-category {
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            color: #d32f2f;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        
+        .carousel-title {
+            font-size: 36px;
+            font-weight: 700;
+            line-height: 1.2;
+            font-family: 'Raleway', sans-serif;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+        
+        .carousel-nav button {
+            background: rgba(255,255,255,0.9);
+            border: none;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            font-size: 24px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .carousel-nav button:hover {
+            background: #d32f2f;
+            color: white;
+        }
+        
+        /* Section Headers */
+        .section-header {
+            font-size: 24px;
+            text-transform: uppercase;
+            color: #2a2a2a;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #d32f2f;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        
+        /* Post Grid */
+        .post-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+        
+        .post-card {
+            background-color: #fff;
+            overflow: hidden;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 1px solid #f0f0f0;
+        }
+        
+        .post-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        
+        .post-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        
+        .post-card:hover img {
+            transform: scale(1.05);
+        }
+        
+        .post-content {
+            padding: 20px;
+        }
+        
+        .post-category {
+            color: #d32f2f;
+            font-size: 11px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        
+        .post-title {
+            font-size: 18px;
+            margin-bottom: 12px;
+            line-height: 1.4;
+            font-weight: 600;
+            font-family: 'Raleway', sans-serif;
+        }
+        
+        .post-title a {
+            text-decoration: none;
+            color: #2a2a2a;
+            transition: color 0.2s;
+        }
+        
+        .post-title a:hover {
+            color: #d32f2f;
+        }
+        
+        .post-excerpt {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            flex: 1;
+        }
+        
+        .sidebar-section {
+            background-color: #fff;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 1px solid #f0f0f0;
+        }
+        
+        .sidebar-title {
+            font-size: 16px;
+            text-transform: uppercase;
+            padding: 15px 20px;
+            background-color: #2a2a2a;
+            color: #fff;
+            font-weight: 700;
+            letter-spacing: 1px;
+            font-family: 'Raleway', sans-serif;
+        }
+        
+        .sidebar-content {
+            padding: 20px;
+        }
+        
+        .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .search-box input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 2px solid #e0e0e0;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: #d32f2f;
+        }
+        
+        .search-box button {
+            padding: 10px 20px;
+            background-color: #d32f2f;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: background 0.3s;
+        }
+        
+        .search-box button:hover {
+            background-color: #b71c1c;
+        }
+        
+        /* Popular Posts */
+        .popular-posts {
+            list-style: none;
+        }
+        
+        .popular-posts li {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .popular-posts li:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .popular-posts img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border: 2px solid #f0f0f0;
+        }
+        
+        .popular-post-content {
+            flex: 1;
+        }
+        
+        .popular-post-title {
+            font-size: 14px;
+            margin-bottom: 5px;
+            line-height: 1.4;
+            font-weight: 600;
+        }
+        
+        .popular-post-title a {
+            text-decoration: none;
+            color: #333;
+            transition: color 0.2s;
+        }
+        
+        .popular-post-title a:hover {
+            color: #d32f2f;
+        }
+        
+        .view-count {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        /* SoundCloud Widget */
+        .soundcloud-embed {
+            width: 100%;
+            height: 166px;
+            border: none;
+        }
+        
+        /* Link styling */
+        a {
+            color: #d32f2f;
+            font-weight: 600;
+        }
+        
+        a:hover {
+            color: #b71c1c;
+            text-decoration: underline;
+        }
+        
+        /* Time Travel Portal */
+        .time-travel-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #fff;
+            border: 2px solid #000;
+            padding: 12px 24px;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 14px;
+            box-shadow: 4px 4px 0 #d32f2f;
+        }
+        
+        .time-travel-button:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 #d32f2f;
+        }
+        
+        .time-travel-button:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 #d32f2f;
+        }
+        
+        .time-travel-button::before {
+            content: '⏪ TIME MACHINE';
+            color: #000;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+        }
+        
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: #1a1a1a;
+            padding: 50px;
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 0 0 1px #333, 0 0 0 2px #000, 0 0 50px rgba(0,0,0,0.8);
+            position: relative;
+        }
+        
+        .modal-header {
+            color: #fff;
+            font-size: 32px;
+            margin-bottom: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-family: 'Raleway', sans-serif;
+        }
+        
+        .modal-subtitle {
+            color: #999;
+            font-size: 18px;
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+        
+        .time-options {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .time-option {
+            background: #000;
+            color: #fff;
+            padding: 20px 30px;
+            border: 2px solid #333;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: block;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        
+        .time-option:hover {
+            border-color: #666;
+            background: #222;
+            transform: translateX(10px);
+        }
+        
+        .close-modal {
+            background: transparent;
+            color: #666;
+            border: 2px solid #333;
+            padding: 12px 30px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .close-modal:hover {
+            color: #fff;
+            border-color: #666;
+        }
+        
+        /* ChrisBot Styles */
+        .chrisbot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 380px;
+            height: 500px;
+            background: #000;
+            border: 2px solid #fff;
+            display: none;
+            flex-direction: column;
+            z-index: 1001;
+            box-shadow: 8px 8px 0 #d32f2f;
+            font-family: 'Raleway', sans-serif;
+        }
+        
+        .chrisbot-container.active {
+            display: flex;
+        }
+        
+        .chrisbot-header {
+            background: #fff;
+            color: #000;
+            padding: 15px 20px;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 14px;
+        }
+        
+        .chrisbot-close {
+            cursor: pointer;
+            font-size: 24px;
+            background: none;
+            border: none;
+            color: #000;
+            font-weight: 400;
+            line-height: 1;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .chrisbot-close:hover {
+            color: #d32f2f;
+        }
+        
+        .chrisbot-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #000;
+            font-size: 14px;
+        }
+        
+        .chrisbot-message {
+            margin-bottom: 15px;
+            padding: 12px 16px;
+            word-wrap: break-word;
+            line-height: 1.5;
+        }
+        
+        .chrisbot-message.bot {
+            background: #1a1a1a;
+            color: #fff;
+            border-left: 3px solid #d32f2f;
+            text-align: left;
+        }
+        
+        .chrisbot-message.user {
+            background: #fff;
+            color: #000;
+            text-align: right;
+            margin-left: 50px;
+        }
+        
+        .chrisbot-input-container {
+            display: flex;
+            padding: 20px;
+            background: #1a1a1a;
+            border-top: 2px solid #fff;
+            gap: 10px;
+        }
+        
+        .chrisbot-input {
+            flex: 1;
+            padding: 10px 15px;
+            background: #000;
+            border: 2px solid #fff;
+            color: #fff;
+            font-family: 'Raleway', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s;
+        }
+        
+        .chrisbot-input:focus {
+            border-color: #d32f2f;
+        }
+        
+        .chrisbot-input::placeholder {
+            color: #666;
+        }
+        
+        .chrisbot-send {
+            padding: 10px 20px;
+            background: #fff;
+            color: #000;
+            border: 2px solid #fff;
+            cursor: pointer;
+            font-weight: 700;
+            font-family: 'Raleway', sans-serif;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 14px;
+        }
+        
+        .chrisbot-send:hover {
+            background: #d32f2f;
+            border-color: #d32f2f;
+            color: #fff;
+        }
+        
+        .typing-indicator {
+            display: none;
+            color: #999;
+            font-style: italic;
+            padding: 0 20px 10px;
+            font-size: 13px;
+        }
+        
+        .typing-indicator.show {
+            display: block;
+        }
+        
+        /* Scrollbar styling for ChrisBot */
+        .chrisbot-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .chrisbot-messages::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        
+        .chrisbot-messages::-webkit-scrollbar-thumb {
+            background: #fff;
+        }
+        
+        .chrisbot-messages::-webkit-scrollbar-thumb:hover {
+            background: #d32f2f;
+        }
+        
+        @media (max-width: 480px) {
+            .chrisbot-container {
+                width: 90%;
+                height: 70vh;
+                right: 5%;
+                left: 5%;
+                bottom: 10px;
+            }
+        }
+    </style>
+    
+    <!-- Custom Kanye West Cursor -->
+    <style type="text/css">* {cursor: url(https://cur.cursors-4u.net/people/peo-5/peo559.cur), auto !important;}</style>
+    <a href="https://www.cursors-4u.com/cursor/2009/02/13/kanye-west.html" target="_blank" title="Kanye West"><img src="https://cur.cursors-4u.net/cursor.png" border="0" alt="Kanye West" style="position:absolute; top: 0px; right: 0px;" /></a>
+</head>
+<body>
+    <!-- Intro Modal -->
+    <div class="intro-overlay" id="introOverlay">
+        <div class="windows-modal">
+            <div class="windows-header">
+                <span>Message for Chris</span>
+            </div>
+            <div class="windows-body">
+                <p>It's almost impossible to give you anything special for your birthday considering the whole me being poor and all but I figured that I could at least show you what all your kindness has allowed me to achieve.</p>
+                <p>Here's a little blast from your past and all the good things coming.</p>
+                <p><strong>Love, Pai.</strong></p>
+                <button class="windows-button" onclick="enterSite()">Rewind the Clock</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Top Bar -->
+    <div class="header-top">
+        <div class="header-nav">
+            <div class="nav-links">
+                <a href="#">Advertisment</a>
+                <a href="#">Legal Stuff</a>
+                <a href="#">What We Do</a>
+                <a href="#">Contribute</a>
+            </div>
+            <div class="social-links">
+                <a href="#">RSS</a>
+                <a href="#">Twitter</a>
+                <a href="#">Facebook</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Logo Section -->
+    <div class="logo-section">
+        <div class="logo-container">
+            <img src="assets/wewitit-logo.png" alt="We Wit It LA Logo" class="logo-image">
+            <!-- ChrisBot between logo and title -->
+            <div class="header-chrisbot" onclick="toggleChrisBot()" title="Chat with ChrisBot!">
+                <img src="assets/chrisbot.png" alt="ChrisBot">
+            </div>
+            <h1 class="logo">We Wit It L.A.</h1>
+            <p class="tagline">Keepin Our Ears to the Streets for L.A. Music, Fashion, Culture, and (Everything in Between)</p>
+        </div>
+    </div>
+    
+    <!-- Main Navigation -->
+    <nav class="main-nav">
+        <ul>
+            <li><a href="https://www.instagram.com/iamchrisblackwell/" target="_blank">Home</a></li>
+            <li><a href="https://davematthewsband.com/tour/" target="_blank">Music</a></li>
+            <li><a href="https://www.instagram.com/iamchrisblackwell/" target="_blank">Videos</a></li>
+            <li><a href="https://www.ssense.com/en-us/men/product/jacquemus/black-the-linu-jacket/17242711" target="_blank">Fashion</a></li>
+            <li><a href="https://open.spotify.com/playlist/0z78WjIxUQowYMJndl1Vml?si=6d8fcc443ee54041" target="_blank">Culture</a></li>
+            <li><a href="https://www.instagram.com/p/DLiFiSOt9AQ/?img_index=1" target="_blank">Everything Else</a></li>
+        </ul>
+    </nav>
+    
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Featured Carousel -->
+            <div class="featured-carousel">
+                <iframe 
+                    src="https://www.sincerely-yours.xyz/artists" 
+                    style="width: 100%; height: 450px; border: none;"
+                    title="Sincerely Yours Artists">
+                </iframe>
+            </div>
+            
+            <!-- Recent Posts Section -->
+            <h3 class="section-header">Recent Posts</h3>
+            
+            <!-- Featured Achievements Grid -->
+            <div class="post-grid">
+                <!-- Republic Records VP -->
+                <article class="post-card">
+                    <img src="assets/republic2.png" alt="Republic Records Executive VP">
+                    <div class="post-content">
+                        <div class="post-category">Career Milestone</div>
+                        <h3 class="post-title">
+                            <a href="https://www.billboard.com/pro/chris-blackwell-republic-records-executive-vp-ar-content-strategy/" target="_blank">
+                                Republic Records: Executive VP of A&R and Content Strategy
+                            </a>
+                        </h3>
+                    </div>
+                </article>
+                
+                <!-- Variety Feature -->
+                <article class="post-card">
+                    <img src="assets/republic.png" alt="Variety Music Feature">
+                    <div class="post-content">
+                        <div class="post-category">Industry Profile</div>
+                        <h3 class="post-title">
+                            <a href="https://variety.com/2019/music/news/republic-records-chris-blackwell-1203435049/" target="_blank">
+                                Variety: Shaping the Future at Republic Records
+                            </a>
+                        </h3>
+                    </div>
+                </article>
+                
+                <!-- USC Annenberg -->
+                <article class="post-card">
+                    <img src="assets/usc.png" alt="USC Annenberg Faculty">
+                    <div class="post-content">
+                        <div class="post-category">Education</div>
+                        <h3 class="post-title">
+                            <a href="https://annenberg.online.usc.edu/dmm/faculty/chris-blackwell/" target="_blank">
+                                USC Annenberg: Digital Media Management Faculty
+                            </a>
+                        </h3>
+                    </div>
+                </article>
+                
+                <!-- All Def Media -->
+                <article class="post-card">
+                    <img src="assets/alldef.png" alt="All Def Media">
+                    <div class="post-content">
+                        <div class="post-category">Digital Media</div>
+                        <h3 class="post-title">
+                            <a href="https://variety.com/2018/digital/news/all-def-media-brooke-goldstein-chris-blackwell-scott-weintrob-1202669321/" target="_blank">
+                                All Def Media: Leading Digital Content Revolution
+                            </a>
+                        </h3>
+                    </div>
+                </article>
+                
+                <!-- IMDB -->
+                <article class="post-card">
+                    <img src="assets/imdb.png" alt="IMDB Profile">
+                    <div class="post-content">
+                        <div class="post-category">Entertainment</div>
+                        <h3 class="post-title">
+                            <a href="https://www.imdb.com/name/nm12567355/" target="_blank">
+                                IMDB: Producer & Music Department Credits
+                            </a>
+                        </h3>
+                    </div>
+                </article>
+                
+                <!-- Ham Jam -->
+                <article class="post-card">
+                    <img src="assets/ham.png" alt="Ham Jam 2016">
+                    <div class="post-content">
+                        <div class="post-category">Community</div>
+                        <h3 class="post-title">
+                            <a href="https://family.do512.com/hamjam2016" target="_blank">
+                                Ham Jam 2016: Family Festival & Community Event
+                            </a>
+                        </h3>
+                    </div>
+                </article>
+            </div>
+            
+            <!-- Classic Posts Section -->
+            <h3 class="section-header">Culture, Everything Else</h3>
+            
+            <div class="post-grid">
+                <!-- Music Festival Post -->
+                <article class="post-card">
+                    <img src="assets/fest.png" alt="Music Festival">
+                    <div class="post-content">
+                        <div class="post-category">Music</div>
+                        <h3 class="post-title">
+                            <a href="#">Your Guide to Surviving Music Festival Season</a>
+                        </h3>
+                    </div>
+                </article>
+                
+                <!-- Mike B Post -->
+                <article class="post-card">
+                    <img src="assets/mike.png" alt="Mike B">
+                    <div class="post-content">
+                        <div class="post-category">Music</div>
+                        <h3 class="post-title">
+                            <a href="#">Mike B x Toestah – "Pressed Up"</a>
+                        </h3>
+                    </div>
+                </article>
+                
+                <!-- Zanerobe Post -->
+                <article class="post-card">
+                    <img src="assets/zane.png" alt="Zanerobe">
+                    <div class="post-content">
+                        <div class="post-category">Fashion</div>
+                        <h3 class="post-title">
+                            <a href="#">Zanerobe "We're Wolves" Fall 2013 Collection</a>
+                        </h3>
+                    </div>
+                </article>
+            </div>
+        </main>
+        
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <!-- Search Section -->
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Search:</h3>
+                <div class="sidebar-content">
+                    <div class="search-box">
+                        <input type="text" placeholder="Search">
+                        <button>Search</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Popular Posts -->
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Popular Posts</h3>
+                <div class="sidebar-content">
+                    <ul class="popular-posts">
+                        <li>
+                            <img src="assets/random.png" alt="Post">
+                            <div class="popular-post-content">
+                                <div class="popular-post-title">
+                                    <a href="#">Accidental sex is the Bes...</a>
+                                </div>
+                                <div class="view-count">2,206 view(s)</div>
+                            </div>
+                        </li>
+                        <li>
+                            <img src="assets/random2.png" alt="Post">
+                            <div class="popular-post-content">
+                                <div class="popular-post-title">
+                                    <a href="#">The Shit You Should Know ...</a>
+                                </div>
+                                <div class="view-count">455 view(s)</div>
+                            </div>
+                        </li>
+                        <li>
+                            <img src="assets/random3.png" alt="Post">
+                            <div class="popular-post-content">
+                                <div class="popular-post-title">
+                                    <a href="#">Taking Over The Scene: Th...</a>
+                                </div>
+                                <div class="view-count">160 view(s)</div>
+                            </div>
+                        </li>
+                        <li>
+                            <img src="assets/random4.png" alt="Post">
+                            <div class="popular-post-content">
+                                <div class="popular-post-title">
+                                    <a href="#">10 Things You Should Know...</a>
+                                </div>
+                                <div class="view-count">113 view(s)</div>
+                            </div>
+                        </li>
+                        <li>
+                            <img src="assets/random5.png" alt="Post">
+                            <div class="popular-post-content">
+                                <div class="popular-post-title">
+                                    <a href="#">Whose Your L.A. Lakers Al...</a>
+                                </div>
+                                <div class="view-count">106 view(s)</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            
+            <!-- SoundCloud -->
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">SoundCloud</h3>
+                <div class="sidebar-content">
+                    <iframe 
+                        class="soundcloud-embed"
+                        scrolling="no" 
+                        frameborder="no" 
+                        allow="autoplay" 
+                        src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/wewititla&color=%23d32f2f&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true">
+                    </iframe>
+                </div>
+            </div>
+        </aside>
+    </div>
+    
+    <!-- Time Travel Portal Button -->
+    <div class="time-travel-button" onclick="openTimePortal()" title="Travel back in time!"></div>
+    
+    <!-- ChrisBot Container -->
+    <div class="chrisbot-container" id="chrisbotContainer">
+        <div class="chrisbot-header">
+            <span>ChrisBot</span>
+            <button class="chrisbot-close" onclick="toggleChrisBot()">×</button>
+        </div>
+        <div class="chrisbot-messages" id="chrisbotMessages">
+            <div class="chrisbot-message bot">
+                What do you need? I'm busy!!!!!
+            </div>
+        </div>
+        <div class="typing-indicator" id="typingIndicator">ChrisBot is typing...</div>
+        <div class="chrisbot-input-container">
+            <input 
+                type="text" 
+                class="chrisbot-input" 
+                id="chrisbotInput" 
+                placeholder="Type your message..."
+                onkeypress="if(event.key === 'Enter') sendMessage()"
+            >
+            <button class="chrisbot-send" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+    
+    <!-- Time Travel Modal -->
+    <div id="timeModal" class="modal">
+        <div class="modal-content">
+            <h2 class="modal-header">Time Machine Portal</h2>
+            <p class="modal-subtitle">What do you want to see Chris talk about?</p>
+            <div class="time-options">
+                <a href="https://web.archive.org/web/20130927151057/http://www.wewititla.com/2013/05/30/taco-bell-unveils-their-newest-monster-the-waffle-taco/" target="_blank" class="time-option">
+                    🧇 Waffle Tacos - The Future of Fast Food
+                </a>
+                <a href="https://web.archive.org/web/20130927151136/http://www.wewititla.com/2013/05/31/cocktail-of-the-week-the-old-fashion/" target="_blank" class="time-option">
+                    🥃 Cocktail of the Week - The Old Fashion
+                </a>
+                <a href="https://web.archive.org/web/20130927150955/http://www.wewititla.com/2013/05/29/gold-panda-releases-the-perfect-wake-up-song-we-work-nights/" target="_blank" class="time-option">
+                    🎵 The Perfect Wake Up Song - Gold Panda
+                </a>
+            </div>
+            <button class="close-modal" onclick="closeTimePortal()">Stay in the Present</button>
+        </div>
+    </div>
+    
+    <script>
+        // Intro modal function
+        function enterSite() {
+            const overlay = document.getElementById('introOverlay');
+            overlay.classList.add('pixelate-out');
+            
+            // Add some glitch effects during transition
+            let glitchCount = 0;
+            const glitchInterval = setInterval(() => {
+                if (glitchCount < 5) {
+                    overlay.style.transform = `translate(${Math.random() * 4 - 2}px, ${Math.random() * 4 - 2}px)`;
+                    glitchCount++;
+                } else {
+                    clearInterval(glitchInterval);
+                    overlay.style.transform = '';
+                }
+            }, 100);
+            
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 1500);
+        }
+        
+        // Time Portal Functions
+        function openTimePortal() {
+            document.getElementById('timeModal').classList.add('show');
+        }
+        
+        function closeTimePortal() {
+            document.getElementById('timeModal').classList.remove('show');
+        }
+        
+        // ChrisBot Functions
+        function toggleChrisBot() {
+            const container = document.getElementById('chrisbotContainer');
+            container.classList.toggle('active');
+            if (container.classList.contains('active')) {
+                document.getElementById('chrisbotInput').focus();
+            }
+        }
+        
+        const chrisResponses = [
+            { type: 'text', content: "Sounds like you're trying to make filet mignon out of hamburger helper. I can hamburger help with that." },
+            { type: 'text', content: "Are we really building the plane while we're flying it?" },
+            { type: 'text', content: "That's what the money's for!" },
+            { type: 'text', content: "N**** what‽‽‽‽‽" },
+            { type: 'text', content: "Why do you hate me?" },
+            { type: 'text', content: "If it doesn't make dollars it doesn't make sense!" },
+            { type: 'text', content: "I only eat crabs from Maryland" },
+            { type: 'gif', content: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYmg2cTd1d3lyZHN2eHRub2s4NWgyaXh2bWwxNmZ3OGlyaGJnb3VrbiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/pynZagVcYxVUk/giphy.gif" },
+            { type: 'gif', content: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbXNsOW1hcHNzbm9wNTNhcXpqNnF2ZmlkMmcyZ2k3a2xvaGthbmw3aiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/HjPbLbmep2aJO/giphy.gif" },
+            { type: 'gif', content: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdGcwbmI2anR3MWZseHd5bTA1YzVja2Fxb290aGxwZGt6cjkzMDhjYyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/l44QvXlVl6wDq46Ck/giphy.gif" }
+        ];
+        
+        function getChrisResponse() {
+            const response = chrisResponses[Math.floor(Math.random() * chrisResponses.length)];
+            return response;
+        }
+        
+        function sendMessage() {
+            const input = document.getElementById('chrisbotInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            const messagesContainer = document.getElementById('chrisbotMessages');
+            const typingIndicator = document.getElementById('typingIndicator');
+            
+            // Add user message
+            const userMessage = document.createElement('div');
+            userMessage.className = 'chrisbot-message user';
+            userMessage.textContent = message;
+            messagesContainer.appendChild(userMessage);
+            
+            // Clear input
+            input.value = '';
+            
+            // Show typing indicator
+            typingIndicator.classList.add('show');
+            
+            // Scroll to bottom
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            // Simulate bot response after delay
+            setTimeout(() => {
+                typingIndicator.classList.remove('show');
+                
+                const botMessage = document.createElement('div');
+                botMessage.className = 'chrisbot-message bot';
+                
+                const response = getChrisResponse();
+                if (response.type === 'gif') {
+                    const img = document.createElement('img');
+                    img.src = response.content;
+                    img.style.width = '100%';
+                    img.style.borderRadius = '4px';
+                    botMessage.appendChild(img);
+                } else {
+                    botMessage.textContent = response.content;
+                }
+                
+                messagesContainer.appendChild(botMessage);
+                
+                // Scroll to bottom
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 1000 + Math.random() * 1000);
+        }
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('timeModal');
+            if (event.target == modal) {
+                closeTimePortal();
+            }
+        }
+    </script>
+</body>
+</html>
